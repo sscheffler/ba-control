@@ -1,5 +1,8 @@
 package de.moving.turtle;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.moving.turtle.api.Identity;
 import de.moving.turtle.api.KnownRecord;
 import de.moving.turtle.api.RawRecord;
 import de.moving.turtle.api.category.Category;
@@ -11,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -43,6 +47,7 @@ public class MoneyControlApplication {
 
     @Autowired
     private CategoryIdentifier categoryIdentifier;
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(MoneyControlApplication.class, args);
