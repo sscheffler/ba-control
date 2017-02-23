@@ -1,0 +1,35 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.1.RELEASE'
+		commonsCsvVersion = '1.3'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("org.apache.commons:commons-csv:${commonsCsvVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+jar {
+	baseName = 'moneycontrol'
+	version = '0.1.0-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter')
+	compile('org.apache.commons:commons-csv:1.3')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
