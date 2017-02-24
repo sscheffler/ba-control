@@ -13,5 +13,5 @@ import java.util.Optional;
 
 public interface RecordParser {
 
-    Optional<Collection<RawRecord>> parseToRaw(String filePath);
+    Collection<RawRecord> parseToRaw(String filePath);
 }

@@ -1,11 +1,11 @@
 package de.moving.turtle;
 
 import de.moving.turtle.analyze.CategoryTotalAnalyzer;
-import de.moving.turtle.api.KnownRecord;
 import de.moving.turtle.api.RawRecord;
 import de.moving.turtle.parse.CategoryIdentifier;
 import de.moving.turtle.parse.RecordIdentifier;
 import de.moving.turtle.parse.RecordParser;
+import de.moving.turtle.process.AnalyzeProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,17 +31,17 @@ public class MoneyControlApplication {
     private String dataPath;
 
     private final RecordParser recordParser;
-    private final RecordIdentifier identifier;
+    private final RecordIdentifier recordIdentifier;
     private final CategoryIdentifier categoryIdentifier;
     private final CategoryTotalAnalyzer categoryTotalAnalyzer;
 
     @Autowired
     public MoneyControlApplication(@Qualifier("csvRecordParser") RecordParser recordParser,
-                                   RecordIdentifier identifier,
+                                   RecordIdentifier recordIdentifier,
                                    CategoryIdentifier categoryIdentifier,
                                    CategoryTotalAnalyzer categoryTotalAnalyzer) {
         this.recordParser = recordParser;
-        this.identifier = identifier;
+        this.recordIdentifier = recordIdentifier;
         this.categoryIdentifier = categoryIdentifier;
         this.categoryTotalAnalyzer = categoryTotalAnalyzer;
     }
@@ -53,15 +53,28 @@ public class MoneyControlApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
-            final Collection<RawRecord> rawRecords = recordParser.parseToRaw(dataPath).orElseGet(() -> emptyList());
-            final RecordIdentifier.IdentificationResult result = identifier.identify(rawRecords);
+            final Optional<CategoryTotalAnalyzer.CategoryTotalResult> categoryTotalResult = new AnalyzeProcessor()
+                    .withAnalyzer(categoryTotalAnalyzer)
+                    .withCategoryIdentifier(categoryIdentifier)
+                    .withFilePath(dataPath)
+                    .withRecordIdentifier(recordIdentifier)
+                    .withRecordParser(recordParser)
+                    .collect()
+                    .get(CategoryTotalAnalyzer.CategoryTotalResult.class);
+
+            categoryTotalResult.ifPresent(r ->
+                        r.byCategory.forEach((key, value) -> LOGGER.info("{}: {}", key, value)
+                    ));
+
+            /*final Collection<RawRecord> rawRecords = recordParser.parseToRaw(dataPath).orElseGet(() -> emptyList());
+            final RecordIdentifier.IdentificationResult result = recordIdentifier.identify(rawRecords);
             result.known
                     .forEach(categoryIdentifier::identify);
 
             final CategoryTotalAnalyzer.CategoryTotalResult analyze = categoryTotalAnalyzer.analyze(result.known);
             analyze.byCategory.forEach(
                     (key, value) -> LOGGER.info("{}: {}", key, value)
-            );
+            );*/
 		};
 	}
 }

@@ -29,20 +29,19 @@ public class CsvRecordParser implements RecordParser{
 
 
     @Override
-    public Optional<Collection<RawRecord>> parseToRaw(String filePath) {
-        Reader in = null;
+    public Collection<RawRecord> parseToRaw(String filePath) {
+        Reader in;
+        final List<RawRecord> rawRecords = new ArrayList<>();
         try {
             in = new InputStreamReader(new FileInputStream(filePath), ENCODING_ISO);
-            final List<RawRecord> rawRecords = new ArrayList<>();
-            Iterable<CSVRecord> csvRecords = DEFAULT
+            final Iterable<CSVRecord> csvRecords = DEFAULT
                     .withFirstRecordAsHeader()
                     .withDelimiter(';')
                     .parse(in);
             csvRecords.forEach(r -> rawRecords.add(fromCsvRecord(r)));
-            return of(rawRecords);
         } catch (Exception e) {
             LOGGER.error("Catched exception", e);
         }
-        return empty();
+        return rawRecords;
     }
 }
