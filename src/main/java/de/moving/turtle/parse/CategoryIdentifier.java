@@ -1,12 +1,17 @@
 package de.moving.turtle.parse;
 
-import de.moving.turtle.api.category.Category;
 import de.moving.turtle.api.KnownRecord;
+import de.moving.turtle.api.category.Category;
 import de.moving.turtle.api.category.UnknownCategory;
+import de.moving.turtle.input.CategoryReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -14,17 +19,42 @@ import java.util.Optional;
  */
 @Component
 public class CategoryIdentifier {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CategoryIdentifier.class);
+    private final CategoryReader categoryReader;
+    private final Map<String, CategoryIdentificationStrategy> strategyMap;
 
     @Autowired
-    private List<CategoryIdentificationStrategy> strategies;
-
-    public KnownRecord identify(KnownRecord record){
-        final Category category = (Category)strategies.stream()
-                .map(s -> s.evaluate(record))
-                .map(o -> o.orElseGet(UnknownCategory::new))
-                .filter(c -> !(c instanceof UnknownCategory))
-                .findFirst()
-                .orElseGet(UnknownCategory::new);
-        return record.withCategory(category);
+    public CategoryIdentifier(@Qualifier("jsonCategoryReader") CategoryReader categoryReader,
+                              Map<String, CategoryIdentificationStrategy> strategyMap) {
+        this.categoryReader = categoryReader;
+        this.strategyMap = strategyMap;
     }
+
+    public KnownRecord identify(KnownRecord record) {
+        final Collection<Category> categories = categoryReader.read();
+        Category finalCategory = new UnknownCategory();
+        for (Category category : categories) {
+            final Optional<Category> resolvedCategory = category.matchers().stream()
+                    .map(m -> {
+                        final CategoryIdentificationStrategy matcherStrategy = strategyMap.get(m.strategy);
+                        if (matcherStrategy != null) {
+                            return (matcherStrategy.belongsToCategory(record, m)) ? category : null;
+                        } else {
+                            LOGGER.warn("Strategy '{}' not found for '{}'. Skipping!", m.strategy, category.id);
+                        }
+                        return null;
+                    })
+                    .filter(c -> c != null)
+                    .findFirst();
+            if(resolvedCategory.isPresent()){
+                finalCategory = resolvedCategory.get();
+                break;
+            }
+        }
+        LOGGER.debug("Resolved category: '{}'", finalCategory.id);
+        return record
+                .withCategory(finalCategory);
+    }
+
+
 }

@@ -1,11 +1,12 @@
 package de.moving.turtle.api.category;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * @author Stefan Scheffler(sscheffler@avantgarde-labs.de)
  */
 public class UnknownCategory extends Category{
-    @Override
-    public String id() {
-        return "category.unknown";
+    public UnknownCategory() {
+        super("category.unknown", "Unknown");
     }
 }

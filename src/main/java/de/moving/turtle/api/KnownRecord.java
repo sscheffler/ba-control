@@ -12,12 +12,12 @@ public class KnownRecord extends ResolvedRecord {
     private final String type;
     private Category category;
 
-    public static KnownRecord from(RawRecord rawRecord, Identity identityOld){
+    public static KnownRecord from(RawRecord rawRecord, Identity identity){
         return new KnownRecord(rawRecord.date(),
                 rawRecord.value(),
-                identityOld.name,
+                identity.name,
                 rawRecord.usage(),
-                identityOld.type);
+                identity.type);
     }
 
     private KnownRecord(String date, BigDecimal value, String purchaser, String usage, String type) {

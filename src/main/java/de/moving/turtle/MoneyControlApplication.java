@@ -1,37 +1,23 @@
 package de.moving.turtle;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import de.moving.turtle.api.Identity;
 import de.moving.turtle.api.KnownRecord;
 import de.moving.turtle.api.RawRecord;
-import de.moving.turtle.api.category.Category;
 import de.moving.turtle.parse.CategoryIdentifier;
 import de.moving.turtle.parse.RecordIdentifier;
 import de.moving.turtle.parse.RecordParser;
-import org.apache.commons.csv.CSVRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
-import java.io.*;
-import java.math.BigDecimal;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-import static de.moving.turtle.parse.RecordIdentifier.*;
-import static java.math.BigDecimal.*;
 import static java.util.Collections.*;
-import static org.apache.commons.csv.CSVFormat.*;
-import static org.springframework.util.StringUtils.*;
 
 @SpringBootApplication
 public class MoneyControlApplication {
