@@ -1,5 +1,6 @@
 package de.moving.turtle;
 
+import de.moving.turtle.analyze.CategoryTotalAnalyzer;
 import de.moving.turtle.api.KnownRecord;
 import de.moving.turtle.api.RawRecord;
 import de.moving.turtle.parse.CategoryIdentifier;
@@ -32,15 +33,18 @@ public class MoneyControlApplication {
     private final RecordParser recordParser;
     private final RecordIdentifier identifier;
     private final CategoryIdentifier categoryIdentifier;
+    private final CategoryTotalAnalyzer categoryTotalAnalyzer;
 
+    @Autowired
     public MoneyControlApplication(@Qualifier("csvRecordParser") RecordParser recordParser,
                                    RecordIdentifier identifier,
-                                   CategoryIdentifier categoryIdentifier) {
+                                   CategoryIdentifier categoryIdentifier,
+                                   CategoryTotalAnalyzer categoryTotalAnalyzer) {
         this.recordParser = recordParser;
         this.identifier = identifier;
         this.categoryIdentifier = categoryIdentifier;
+        this.categoryTotalAnalyzer = categoryTotalAnalyzer;
     }
-
 
     public static void main(String[] args) {
 		SpringApplication.run(MoneyControlApplication.class, args);
@@ -54,28 +58,10 @@ public class MoneyControlApplication {
             result.known
                     .forEach(categoryIdentifier::identify);
 
-            // This is just an example for analysis. In a later step, there will be an analyzerstructure
-            final Map<String, List<KnownRecord>> byCategory = new HashMap<>();
-            result.known.stream()
-                    .forEach(r -> {
-                        if(!byCategory.containsKey(r.category().id())){
-                            byCategory.put(r.category().id(), new ArrayList<>());
-                        }
-                        byCategory.get(r.category().id()).add(r);
-                    });
-            byCategory.entrySet().stream()
-                    .map((stringListEntry) -> {
-                        LOGGER.info("Key: '{}'", stringListEntry.getKey());
-                        return stringListEntry.getValue();
-                    })
-                    .forEach(l -> l.stream()
-                            .map(KnownRecord::value)
-                            .reduce((a,b)-> a.add(b))
-                            .ifPresent(r -> LOGGER.info("Result: {}", r.toString())));
-
-
-            LOGGER.info("Done");
-            //result.unknown.stream().forEach(r -> LOGGER.info(r.toString()));
+            final CategoryTotalAnalyzer.CategoryTotalResult analyze = categoryTotalAnalyzer.analyze(result.known);
+            analyze.byCategory.forEach(
+                    (key, value) -> LOGGER.info("{}: {}", key, value)
+            );
 		};
 	}
 }
