@@ -34,7 +34,7 @@ public class CategoryTotalAnalyzer implements Analyzer<CategoryTotalAnalyzer.Cat
                     .map(KnownRecord::value)
                     .reduce(BigDecimal::add)
                     .orElseGet(() -> ZERO);
-            result.byCategory.put(key, total);
+            result.withTotal(key, total);
         });
 
         return result;
