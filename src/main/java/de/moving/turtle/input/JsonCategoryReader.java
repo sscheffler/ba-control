@@ -2,7 +2,6 @@ package de.moving.turtle.input;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.moving.turtle.api.Identity;
 import de.moving.turtle.api.category.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

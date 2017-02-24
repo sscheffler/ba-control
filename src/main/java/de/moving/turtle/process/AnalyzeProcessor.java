@@ -1,6 +1,5 @@
 package de.moving.turtle.process;
 
-import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import de.moving.turtle.analyze.Analyzer;
 import de.moving.turtle.api.AnalyzeResult;
@@ -11,7 +10,6 @@ import de.moving.turtle.parse.RecordIdentifier;
 import de.moving.turtle.parse.RecordParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -58,12 +56,6 @@ public class AnalyzeProcessor {
     }
 
     public ResultProcessor collect(){
-        checkNotNull(recordParser, "Recordparser must not be null");
-        checkNotNull(categoryIdentifier, "CategoryIdentifier must not be null");
-        checkNotNull(recordIdentifier, "RecordIdentifier must not be null");
-        if(Strings.isNullOrEmpty(filePath)){
-            throw new IllegalArgumentException("FilePath not set");
-        }
         final Collection<RawRecord> rawRecords = recordParser.parseToRaw(filePath);
         LOGGER.info("'{}' rawrecords collected.", rawRecords.size());
         final RecordIdentifier.IdentificationResult identify = recordIdentifier.identify(rawRecords);

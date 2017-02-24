@@ -1,8 +1,6 @@
 package de.moving.turtle;
 
 import de.moving.turtle.analyze.CategoryTotalAnalyzer;
-import de.moving.turtle.api.KnownRecord;
-import de.moving.turtle.app.KnownRecordRepository;
 import de.moving.turtle.process.AnalyzeProcessor;
 import de.moving.turtle.process.ImportProcessor;
 import org.slf4j.Logger;
@@ -14,8 +12,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-
-import java.math.BigDecimal;
 
 /**
  * This is an utility module. Application is just for testing purposes!

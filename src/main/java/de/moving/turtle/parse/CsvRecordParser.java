@@ -7,16 +7,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 import static de.moving.turtle.api.RawRecord.fromCsvRecord;
-import static java.util.Optional.*;
 import static org.apache.commons.csv.CSVFormat.DEFAULT;
 
 /**

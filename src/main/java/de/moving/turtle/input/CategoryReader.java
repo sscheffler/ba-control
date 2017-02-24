@@ -1,6 +1,5 @@
 package de.moving.turtle.input;
 
-import de.moving.turtle.api.Identity;
 import de.moving.turtle.api.category.Category;
 
 import java.util.Collection;

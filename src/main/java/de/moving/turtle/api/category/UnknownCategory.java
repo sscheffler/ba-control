@@ -1,7 +1,5 @@
 package de.moving.turtle.api.category;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * @author Stefan Scheffler(sscheffler@avantgarde-labs.de)
  */
