@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.BiConsumer;
 
+import static java.math.BigDecimal.*;
+
 /**
  * @author Stefan Scheffler(sscheffler@avantgarde-labs.de)
  */
@@ -30,8 +32,8 @@ public class CategoryTotalAnalyzer implements Analyzer<CategoryTotalAnalyzer.Cat
         recordsByCategory.forEach((key, value)->{
             final BigDecimal total = value.stream()
                     .map(KnownRecord::value)
-                    .reduce((a, b) -> a.add(b))
-                    .orElseGet(() -> BigDecimal.ZERO);
+                    .reduce(BigDecimal::add)
+                    .orElseGet(() -> ZERO);
             result.byCategory.put(key, total);
         });
 
