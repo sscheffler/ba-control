@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,35 +20,43 @@ import java.util.*;
 
 import static java.util.Collections.*;
 
+/**
+ * This is an utility module. Application is just for testing purposes!
+ */
 @SpringBootApplication
 public class MoneyControlApplication {
     private static final Logger LOGGER = LoggerFactory.getLogger(MoneyControlApplication.class);
-    private static final String FILE_PATH = "/home/sscheffler/Downloads/data.csv";
+    @Value("${path.data}")
+    private String dataPath;
 
-    @Autowired
-    @Qualifier("csvRecordParser")
-    private RecordParser recordParser;
+    private final RecordParser recordParser;
+    private final RecordIdentifier identifier;
+    private final CategoryIdentifier categoryIdentifier;
 
-    @Autowired
-    private RecordIdentifier identifier;
+    public MoneyControlApplication(@Qualifier("csvRecordParser") RecordParser recordParser,
+                                   RecordIdentifier identifier,
+                                   CategoryIdentifier categoryIdentifier) {
+        this.recordParser = recordParser;
+        this.identifier = identifier;
+        this.categoryIdentifier = categoryIdentifier;
+    }
 
-    @Autowired
-    private CategoryIdentifier categoryIdentifier;
 
-
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 		SpringApplication.run(MoneyControlApplication.class, args);
 	}
 
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
-            final Collection<RawRecord> rawRecords = recordParser.parseToRaw(FILE_PATH).orElseGet(() -> emptyList());
+            final Collection<RawRecord> rawRecords = recordParser.parseToRaw(dataPath).orElseGet(() -> emptyList());
             final RecordIdentifier.IdentificationResult result = identifier.identify(rawRecords);
+            result.known
+                    .forEach(categoryIdentifier::identify);
 
+            // This is just an example for analysis. In a later step, there will be an analyzerstructure
             final Map<String, List<KnownRecord>> byCategory = new HashMap<>();
             result.known.stream()
-                    .map(categoryIdentifier::identify)
                     .forEach(r -> {
                         if(!byCategory.containsKey(r.category().id())){
                             byCategory.put(r.category().id(), new ArrayList<>());
