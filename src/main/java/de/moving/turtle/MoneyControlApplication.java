@@ -1,6 +1,8 @@
 package de.moving.turtle;
 
 import de.moving.turtle.analyze.CategoryTotalAnalyzer;
+import de.moving.turtle.api.KnownRecord;
+import de.moving.turtle.app.KnownRecordRepository;
 import de.moving.turtle.parse.CategoryIdentifier;
 import de.moving.turtle.parse.RecordIdentifier;
 import de.moving.turtle.parse.RecordParser;
@@ -16,6 +18,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -30,6 +33,9 @@ public class MoneyControlApplication {
     private final AnalyzeProcessor categoryTotalProcessor;
 
     @Autowired
+    KnownRecordRepository knownRecordRepository;
+
+    @Autowired
     public MoneyControlApplication(AnalyzeProcessor categoryTotalProcessor) {
         this.categoryTotalProcessor = categoryTotalProcessor;
     }
@@ -41,6 +47,8 @@ public class MoneyControlApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
+
+            knownRecordRepository.save(new KnownRecord("asd", BigDecimal.TEN,"purchaser", "usage","type"));
             categoryTotalProcessor
                     .withFilePath(dataPath)
                     .collect()

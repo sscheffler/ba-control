@@ -1,6 +1,7 @@
 package de.moving.turtle.api;
 
 import de.moving.turtle.api.category.Category;
+import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
 
@@ -9,6 +10,8 @@ import java.math.BigDecimal;
  */
 public class KnownRecord extends ResolvedRecord {
 
+    @Id
+    public String id;
     private final String type;
     private Category category;
 
@@ -20,7 +23,7 @@ public class KnownRecord extends ResolvedRecord {
                 identity.type);
     }
 
-    private KnownRecord(String date, BigDecimal value, String purchaser, String usage, String type) {
+    public KnownRecord(String date, BigDecimal value, String purchaser, String usage, String type) {
         super(date, value, purchaser, usage);
         this.type = type;
     }
