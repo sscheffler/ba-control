@@ -67,7 +67,7 @@ public class AnalyzeProcessor {
         final Collection<RawRecord> rawRecords = recordParser.parseToRaw(filePath);
         LOGGER.info("'{}' rawrecords collected.", rawRecords.size());
         final RecordIdentifier.IdentificationResult identify = recordIdentifier.identify(rawRecords);
-        LOGGER.info("'{}'/'{}' known / unknown records collected.", identify.known, identify.unknown);
+        LOGGER.info("'{}'/'{}' known / unknown records collected.", identify.known.size(), identify.unknown.size());
         final List<KnownRecord> enrichedByCategory = identify.known.stream()
                 .map(categoryIdentifier::identify)
                 .collect(Collectors.toList());

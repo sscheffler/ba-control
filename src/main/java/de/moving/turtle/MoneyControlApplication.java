@@ -3,14 +3,11 @@ package de.moving.turtle;
 import de.moving.turtle.analyze.CategoryTotalAnalyzer;
 import de.moving.turtle.api.KnownRecord;
 import de.moving.turtle.app.KnownRecordRepository;
-import de.moving.turtle.parse.CategoryIdentifier;
-import de.moving.turtle.parse.RecordIdentifier;
-import de.moving.turtle.parse.RecordParser;
 import de.moving.turtle.process.AnalyzeProcessor;
+import de.moving.turtle.process.ImportProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +16,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 import java.math.BigDecimal;
-import java.util.*;
 
 /**
  * This is an utility module. Application is just for testing purposes!
@@ -31,13 +27,12 @@ public class MoneyControlApplication {
     private String dataPath;
 
     private final AnalyzeProcessor categoryTotalProcessor;
+    private final ImportProcessor knownRecordImportProcessor;
 
     @Autowired
-    KnownRecordRepository knownRecordRepository;
-
-    @Autowired
-    public MoneyControlApplication(AnalyzeProcessor categoryTotalProcessor) {
+    public MoneyControlApplication(AnalyzeProcessor categoryTotalProcessor, ImportProcessor knownRecordImportProcessor) {
         this.categoryTotalProcessor = categoryTotalProcessor;
+        this.knownRecordImportProcessor = knownRecordImportProcessor;
     }
 
     public static void main(String[] args) {
@@ -47,8 +42,11 @@ public class MoneyControlApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
-
-            knownRecordRepository.save(new KnownRecord("asd", BigDecimal.TEN,"purchaser", "usage","type"));
+            knownRecordImportProcessor
+                    .withFilePath(dataPath)
+                    .importKnownRecords()
+                    .importUnknownRecords()
+                    .perform();
             categoryTotalProcessor
                     .withFilePath(dataPath)
                     .collect()
