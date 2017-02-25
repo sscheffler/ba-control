@@ -2,7 +2,7 @@ package de.moving.turtle;
 
 import de.moving.turtle.analyze.CategoryTotalAnalyzer;
 import de.moving.turtle.process.AnalyzeProcessor;
-import de.moving.turtle.process.ImportProcessor;
+import de.moving.turtle.process.ImportRecordsProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +23,12 @@ public class MoneyControlApplication {
     private String dataPath;
 
     private final AnalyzeProcessor categoryTotalProcessor;
-    private final ImportProcessor knownRecordImportProcessor;
+    private final ImportRecordsProcessor knownRecordImportRecordsProcessor;
 
     @Autowired
-    public MoneyControlApplication(AnalyzeProcessor categoryTotalProcessor, ImportProcessor knownRecordImportProcessor) {
+    public MoneyControlApplication(AnalyzeProcessor categoryTotalProcessor, ImportRecordsProcessor knownRecordImportRecordsProcessor) {
         this.categoryTotalProcessor = categoryTotalProcessor;
-        this.knownRecordImportProcessor = knownRecordImportProcessor;
+        this.knownRecordImportRecordsProcessor = knownRecordImportRecordsProcessor;
     }
 
     public static void main(String[] args) {
@@ -38,7 +38,7 @@ public class MoneyControlApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
-            knownRecordImportProcessor
+            knownRecordImportRecordsProcessor
                     .withFilePath(dataPath)
                     .importKnownRecords()
                     .importUnknownRecords()

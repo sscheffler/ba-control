@@ -1,4 +1,4 @@
-package de.moving.turtle.app;
+package de.moving.turtle.mongo;
 
 import de.moving.turtle.api.KnownRecord;
 import org.springframework.data.mongodb.repository.MongoRepository;
