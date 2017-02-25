@@ -40,7 +40,7 @@ public class CategoryIdentifier {
                         if (matcherStrategy != null) {
                             return (matcherStrategy.belongsToCategory(record, m)) ? category : null;
                         } else {
-                            LOGGER.warn("Strategy '{}' not found for '{}'. Skipping!", m.strategy, category.id);
+                            LOGGER.warn("Strategy '{}' not found for '{}'. Skipping!", m.strategy, category.categoryId);
                         }
                         return null;
                     })
@@ -51,7 +51,7 @@ public class CategoryIdentifier {
                 break;
             }
         }
-        LOGGER.debug("Resolved category: '{}'", finalCategory.id);
+        LOGGER.debug("Resolved category: '{}'", finalCategory.categoryId);
         return record
                 .withCategory(finalCategory);
     }

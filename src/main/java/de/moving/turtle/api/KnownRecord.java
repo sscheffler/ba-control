@@ -45,7 +45,7 @@ public class KnownRecord extends ResolvedRecord {
     public String toString() {
         return "KnownRecord{" +
                 "type='" + type + '\'' +
-                ", category.id='" + category.id() + '\'' +
+                ", category.categoryId='" + category.categoryId() + '\'' +
                 ", " + super.toString() +
                 '}';
     }

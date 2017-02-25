@@ -22,10 +22,10 @@ public class CategoryTotalAnalyzer implements Analyzer<CategoryTotalAnalyzer.Cat
         final Map<String, List<KnownRecord>> recordsByCategory = new HashMap<>();
         records.stream()
                 .forEach(r -> {
-                    if(!recordsByCategory.containsKey(r.category().id())){
-                        recordsByCategory.put(r.category().id(), new ArrayList<>());
+                    if(!recordsByCategory.containsKey(r.category().categoryId())){
+                        recordsByCategory.put(r.category().categoryId(), new ArrayList<>());
                     }
-                    recordsByCategory.get(r.category().id()).add(r);
+                    recordsByCategory.get(r.category().categoryId()).add(r);
                 });
 
         recordsByCategory.forEach((key, value)->{

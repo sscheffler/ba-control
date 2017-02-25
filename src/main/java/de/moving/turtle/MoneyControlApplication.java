@@ -2,6 +2,7 @@ package de.moving.turtle;
 
 import de.moving.turtle.analyze.CategoryTotalAnalyzer;
 import de.moving.turtle.process.AnalyzeProcessor;
+import de.moving.turtle.process.ImportMetaProcessor;
 import de.moving.turtle.process.ImportRecordsProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,11 +25,15 @@ public class MoneyControlApplication {
 
     private final AnalyzeProcessor categoryTotalProcessor;
     private final ImportRecordsProcessor knownRecordImportRecordsProcessor;
+    private final ImportMetaProcessor importMetaProcessor;
 
     @Autowired
-    public MoneyControlApplication(AnalyzeProcessor categoryTotalProcessor, ImportRecordsProcessor knownRecordImportRecordsProcessor) {
+    public MoneyControlApplication(AnalyzeProcessor categoryTotalProcessor,
+                                   ImportRecordsProcessor knownRecordImportRecordsProcessor,
+                                   ImportMetaProcessor importMetaProcessor) {
         this.categoryTotalProcessor = categoryTotalProcessor;
         this.knownRecordImportRecordsProcessor = knownRecordImportRecordsProcessor;
+        this.importMetaProcessor = importMetaProcessor;
     }
 
     public static void main(String[] args) {
@@ -38,6 +43,8 @@ public class MoneyControlApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
+            importMetaProcessor.perform();
+
             knownRecordImportRecordsProcessor
                     .withFilePath(dataPath)
                     .importKnownRecords()
