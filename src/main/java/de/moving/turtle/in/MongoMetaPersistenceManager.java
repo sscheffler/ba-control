@@ -30,8 +30,18 @@ public class MongoMetaPersistenceManager implements MetaPersistenceManager {
     }
 
     @Override
+    public void persistCategory(Category category) {
+        categoryRepository.save(category);
+    }
+
+    @Override
     public Collection<Category> loadCategories() {
         return categoryRepository.findAll();
+    }
+
+    @Override
+    public boolean containsCategory(Category category) {
+        return categoryRepository.findByCategoryId(category.categoryId) != null;
     }
 
     @Override
@@ -40,7 +50,17 @@ public class MongoMetaPersistenceManager implements MetaPersistenceManager {
     }
 
     @Override
+    public void persistIdentity(Identity identity) {
+        identityRepository.save(identity);
+    }
+
+    @Override
     public Collection<Identity> loadIdentities() {
         return identityRepository.findAll();
+    }
+
+    @Override
+    public boolean containsIdentity(Identity identity) {
+        return identityRepository.findByName(identity.name) != null;
     }
 }

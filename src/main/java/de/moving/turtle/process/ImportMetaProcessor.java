@@ -39,7 +39,12 @@ public class ImportMetaProcessor {
     }
 
     public void perform(){
-        persistenceManager.persistIdentities(identityReader.read());
-        persistenceManager.persistCategories(categoryReader.read());
+        identityReader.read().stream()
+                .filter((identity) -> !persistenceManager.containsIdentity(identity))
+                .forEach(persistenceManager::persistIdentity);
+
+        categoryReader.read().stream()
+                .filter((category) -> !persistenceManager.containsCategory(category))
+                .forEach(persistenceManager::persistCategory);
     }
 }
