@@ -12,14 +12,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
 
 /**
  * This is an utility module. Application is just for testing purposes!
  */
 @SpringBootApplication
-public class MoneyControlApplication {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MoneyControlApplication.class);
+public class BaApplication {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BaApplication.class);
     @Value("${path.data}")
     private String dataPath;
 
@@ -28,19 +27,19 @@ public class MoneyControlApplication {
     private final ImportMetaProcessor importMetaProcessor;
 
     @Autowired
-    public MoneyControlApplication(AnalyzeProcessor categoryTotalProcessor,
-                                   ImportRecordsProcessor knownRecordImportRecordsProcessor,
-                                   ImportMetaProcessor importMetaProcessor) {
+    public BaApplication(AnalyzeProcessor categoryTotalProcessor,
+                         ImportRecordsProcessor knownRecordImportRecordsProcessor,
+                         ImportMetaProcessor importMetaProcessor) {
         this.categoryTotalProcessor = categoryTotalProcessor;
         this.knownRecordImportRecordsProcessor = knownRecordImportRecordsProcessor;
         this.importMetaProcessor = importMetaProcessor;
     }
 
     public static void main(String[] args) {
-		SpringApplication.run(MoneyControlApplication.class, args);
+		SpringApplication.run(BaApplication.class, args);
 	}
 
-	@Bean
+	//@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
             importMetaProcessor.perform();
