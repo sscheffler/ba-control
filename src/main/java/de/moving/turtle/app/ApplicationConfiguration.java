@@ -44,12 +44,12 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public ImportMetaProcessor importMetaProcessor(IdentityReader jsonidentityReader,
+    public ImportMetaProcessor importMetaProcessor(IdentityReader mongoIdentityReader,
                                                    CategoryReader jsonCategoryReader,
                                                    MetaPersistenceManager mongoMetaPersistenceManager){
         return new ImportMetaProcessor()
                 .withPersistenceManager(mongoMetaPersistenceManager)
-                .withIdentityReader(jsonidentityReader)
+                .withIdentityReader(mongoIdentityReader)
                 .withCategoryReader(jsonCategoryReader);
     }
 

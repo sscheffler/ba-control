@@ -24,9 +24,9 @@ public class CategoryIdentifier {
     private final Map<String, CategoryIdentificationStrategy> strategyMap;
 
     @Autowired
-    public CategoryIdentifier(@Qualifier("jsonCategoryReader") CategoryReader categoryReader,
+    public CategoryIdentifier(CategoryReader mongoCategoryReader,
                               Map<String, CategoryIdentificationStrategy> strategyMap) {
-        this.categoryReader = categoryReader;
+        this.categoryReader = mongoCategoryReader;
         this.strategyMap = strategyMap;
     }
 

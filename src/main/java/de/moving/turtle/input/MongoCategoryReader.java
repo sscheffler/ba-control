@@ -3,6 +3,7 @@ package de.moving.turtle.input;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.moving.turtle.api.category.Category;
+import de.moving.turtle.mongo.CategoryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,22 +19,16 @@ import java.util.List;
  * @author Stefan Scheffler(sscheffler@avantgarde-labs.de)
  */
 @Component
-public class JsonCategoryReader implements CategoryReader {
-    private static final Logger LOGGER = LoggerFactory.getLogger(JsonCategoryReader.class);
-    private static ObjectMapper MAPPER = new ObjectMapper();
+public class MongoCategoryReader implements CategoryReader {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MongoCategoryReader.class);
+    private final CategoryRepository categoryRepository;
 
-    @Value("${path.categories}")
-    private String categoryPath;
+    public MongoCategoryReader(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
     @Override
     public Collection<Category> read() {
-        try {
-            final File file = new File(categoryPath);
-            return MAPPER.readValue(file, new TypeReference<List<Category>>(){});
-        } catch (IOException e) {
-            LOGGER.error("Error", e);
-        }
-
-        return Collections.emptyList();
+        return categoryRepository.findAll();
     }
 }

@@ -17,8 +17,8 @@ public class RecordIdentifier {
     private final IdentityReader identityReader;
 
     @Autowired
-    public RecordIdentifier(@Qualifier("jsonIdentityReader") IdentityReader identityReader) {
-        this.identityReader = identityReader;
+    public RecordIdentifier(IdentityReader mongoIdentityReader) {
+        this.identityReader = mongoIdentityReader;
     }
 
     public class IdentificationResult {

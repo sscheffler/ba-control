@@ -12,6 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 
 /**
  * This is an utility module. Application is just for testing purposes!
@@ -39,7 +40,7 @@ public class BaApplication {
 		SpringApplication.run(BaApplication.class, args);
 	}
 
-	//@Bean
+	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
             importMetaProcessor.perform();
