@@ -1,5 +1,7 @@
 package de.moving.turtle.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 
 /**
@@ -14,9 +16,13 @@ public class UnknownRecord extends ResolvedRecord {
                 rawRecord.usage());
     }
 
-    private UnknownRecord(String date, BigDecimal value, String purchaser, String usage) {
+    private UnknownRecord(@JsonProperty("date") String date,
+                          @JsonProperty("value") BigDecimal value,
+                          @JsonProperty("purchaser") String purchaser,
+                          @JsonProperty("usage") String usage) {
         super(date, value, purchaser, usage);
     }
+
 
     @Override
     public String toString() {

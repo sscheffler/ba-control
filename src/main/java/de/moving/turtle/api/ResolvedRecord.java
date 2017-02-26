@@ -1,5 +1,7 @@
 package de.moving.turtle.api;
 
+import org.springframework.data.annotation.Id;
+
 import java.math.BigDecimal;
 
 /**
@@ -7,10 +9,12 @@ import java.math.BigDecimal;
  */
 public abstract class ResolvedRecord implements Record {
 
-    final String date;
-    final BigDecimal value;
-    final String purchaser;
-    final String usage;
+    @Id
+    public String id;
+    public String date;
+    public BigDecimal value;
+    public String purchaser;
+    public String usage;
 
     protected ResolvedRecord(String date, BigDecimal value, String purchaser, String usage) {
         this.date = date;

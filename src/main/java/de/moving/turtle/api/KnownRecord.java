@@ -1,5 +1,6 @@
 package de.moving.turtle.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import de.moving.turtle.api.category.Category;
 import org.springframework.data.annotation.Id;
 
@@ -10,8 +11,6 @@ import java.math.BigDecimal;
  */
 public class KnownRecord extends ResolvedRecord {
 
-    @Id
-    public String id;
     private final String type;
     private Category category;
 
@@ -23,9 +22,22 @@ public class KnownRecord extends ResolvedRecord {
                 identity.type);
     }
 
-    public KnownRecord(String date, BigDecimal value, String purchaser, String usage, String type) {
+    public KnownRecord(
+            @JsonProperty("date") String date,
+            @JsonProperty("value") BigDecimal value,
+            @JsonProperty("purchaser") String purchaser,
+            @JsonProperty("usage") String usage,
+            @JsonProperty("type") String type) {
         super(date, value, purchaser, usage);
         this.type = type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 
     public KnownRecord withCategory(Category category) {
