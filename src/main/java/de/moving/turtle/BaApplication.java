@@ -40,7 +40,7 @@ public class BaApplication {
 		SpringApplication.run(BaApplication.class, args);
 	}
 
-	@Bean
+//	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
             importMetaProcessor.perform();
